@@ -8,6 +8,7 @@ package STF;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
@@ -21,8 +22,19 @@ public class ClientPumpKIN
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        
+        byte[] datas = new byte[]
+        {
+          1, 2, 3, 4, 5, 0, 6, 7, 8  
+        };
+        
+        int end;
+        for(end = 0; end < datas.length && datas[end] != 0; end++)
+            ;
+        int len = end - 0;
+        
+        System.out.print(len);
     }
     
     

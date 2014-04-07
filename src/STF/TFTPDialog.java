@@ -23,6 +23,7 @@ public class TFTPDialog
     public TFTPDialog(String address)
     {
         this.address = address;
+        this.timeout = 0;
     }
     
     private String address;
@@ -51,6 +52,10 @@ public class TFTPDialog
     }
     
     private int timeout;
+    public int getTimeOut()
+    {
+        return timeout;
+    }
     public void setTimeOut(int timeout) throws SocketException
     {
         this.timeout = timeout;
@@ -58,22 +63,22 @@ public class TFTPDialog
             socket.setSoTimeout(timeout);
     }
     
-    protected void SendDtg(TFTPMessage msg, int port) throws IOException
+    protected void SendMsg(TFTPMessage msg, int port) throws Exception
     {
-        byte[] datas = msg.getData();
+        byte[] datas = msg.getDataFormated();
         
         DatagramPacket packet = new DatagramPacket(datas, datas.length, inetAddress, port);
         
         socket.send(packet);
     }
     
-    protected byte[] ReceiveDtg() throws IOException, SocketTimeoutException
+    protected TFTPMessage ReceiveMsg() throws IOException, SocketTimeoutException, TFTPMessage.WrongDataFormatException
     {
-        byte[] buffer = new byte[516];
+        byte[] buffer = new byte[2048];
         DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
         
         socket.receive(packet);
         
-        return packet.getData();
+        return TFTPMessage.CreateFromDtg(packet);
     }
 }
